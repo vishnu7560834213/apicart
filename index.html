@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1 class="text-primary text-center">Cart Data</h1>
+    <div class="container">
+        <div class="row" id="result"></div>
+    </div>
+
+    <script>
+        // Fetch data using fetch API from the correct URL
+        fetch('https://dummyjson.com/carts')
+        .then(response => response.json())
+        .then(data => displayData(data.carts))
+        .catch(error => console.error('Error:', error));
+
+        function displayData(cartsArray) {
+            let htmlData = '';
+            for (let cart of cartsArray) {
+                htmlData += `
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Cart ID: ${cart.id}</h5>
+                                <p class="card-text">
+                                    <strong>Total: </strong>${cart.total}<br>
+                                    <strong>Discounted Total: </strong>${cart.discountedTotal}<br>
+                                    <strong>User ID: </strong>${cart.userId}<br>
+                                    <strong>Total Products: </strong>${cart.totalProducts}<br>
+                                    <strong>Total Quantity: </strong>${cart.totalQuantity}<br>
+                                </p>
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    ${cart.products.map(product => `
+                                        <div class="col">
+                                            <div class="card">
+                                                <img src="${product.thumbnail}" class="card-img-top" alt="Thumbnail">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">Product ID: ${product.id}</h6>
+                                                    <p class="card-text">
+                                                        <strong>Title: </strong>${product.title}<br>
+                                                        <strong>Price: </strong>${product.price}<br>
+                                                        <strong>Quantity: </strong>${product.quantity}<br>
+                                                        <strong>Total: </strong>${product.total}<br>
+                                                        <strong>Discount Percentage: </strong>${product.discountPercentage}<br>
+                                                        <strong>Discounted Price: </strong>${product.discountedPrice}<br>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('result').innerHTML = htmlData;
+        }
+    </script>
+</body>
+</html>
+
